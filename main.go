@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"fmt"
 	"html/template"
@@ -29,9 +30,9 @@ func init() {
 	secondViewHTML := assets.MustAssetString("templates/second_view.html")
 	secondViewTpl = template.Must(template.New("second_view").Parse(secondViewHTML))
 
-	thirdViewFuncMap := ThirdViewFormattingFuncMap()
-	thirdViewHTML := assets.MustAssetString("templates/third_view.html")
-	thirdViewTpl = template.Must(template.New("third_view").Funcs(thirdViewFuncMap).Parse(thirdViewHTML))
+	// thirdViewFuncMap := ThirdViewFormattingFuncMap()
+	// thirdViewHTML := assets.MustAssetString("templates/third_view.html")
+	// thirdViewTpl = template.Must(template.New("third_view").Funcs(thirdViewFuncMap).Parse(thirdViewHTML))
 }
 
 func main() {
@@ -48,6 +49,38 @@ func main() {
 	<-sigChan
 
 	fmt.Println("main : shutting down")
+}
+
+// HomeHandler renders the homepage view template
+func HomeHandler(w http.ResponseWriter, r *http.Request) {
+	push(w, "/static/style.css")
+	push(w, "/static/navigation_bar.css")
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+
+	fullData := map[string]interface{}{
+		"NavigationBar": template.HTML(navigationBarHTML),
+	}
+	render(w, r, homepageTpl, "homepage_view", fullData)
+}
+
+// Render a template, or server error.
+func render(w http.ResponseWriter, r *http.Request, tpl *template.Template, name string, data interface{}) {
+	buf := new(bytes.Buffer)
+	if err := tpl.ExecuteTemplate(buf, name, data); err != nil {
+		fmt.Printf("\nRender Error: %v\n", err)
+		return
+	}
+	w.Write(buf.Bytes())
+}
+
+// Push the given resource to the client.
+func push(w http.ResponseWriter, resource string) {
+	pusher, ok := w.(http.Pusher)
+	if ok {
+		if err := pusher.Push(resource, nil); err == nil {
+			return
+		}
+	}
 }
 
 // Config provides basic configuration
@@ -72,8 +105,8 @@ func Start(cfg Config) *HTMLServer {
 	// Setup Handlers
 	router := mux.NewRouter()
 	router.HandleFunc("/", HomeHandler)
-	router.HandleFunc("/second", SecondHandler)
-	router.HandleFunc("/third/{number}", ThirdHandler)
+	//router.HandleFunc("/second", SecondHandler)
+	//router.HandleFunc("/third/{number}", ThirdHandler)
 	router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
 
 	// Create the HTML Server

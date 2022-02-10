@@ -1,2 +1,4 @@
 github.com/gorilla/mux v1.8.0 h1:i40aqfkR1h2SlN9hojwV5ZA91wcXFOvkdNIeFDP5koI=
 github.com/gorilla/mux v1.8.0/go.mod h1:DVbg23sWSpFRCP0SfiEN6jmj59UnW/n46BH5rLB71So=
+github.com/meshhq/golang-html-template-tutorial v0.0.0-20171113171700-234ee402c685 h1:6JXSPBazko7Nb5V9SVSB06T/SWuTbruHOZT/tSREA/s=
+github.com/meshhq/golang-html-template-tutorial v0.0.0-20171113171700-234ee402c685/go.mod h1:7Me0bDQ2zoEFw6aTERoDrRJ0OCAaDfIKVzOJ7DmgIYs=
