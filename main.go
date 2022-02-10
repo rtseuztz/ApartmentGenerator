@@ -12,8 +12,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/meshhq/golang-html-template-tutorial/assets"
-
 	"github.com/gorilla/mux"
 )
 
@@ -25,11 +23,11 @@ var thirdViewTpl *template.Template
 func init() {
 	//navigationBarHTML = assets.MustAssetString("templates/navigation_bar.html")
 	navigationBarHTML = getFileAsHTML("navigation_bar") // THIS WORKS !!!
-	homepageHTML := assets.MustAssetString("templates/index.html")
+	homepageHTML := getFileAsHTML("index")
 	homepageTpl = template.Must(template.New("homepage_view").Parse(homepageHTML))
 
-	secondViewHTML := assets.MustAssetString("templates/second_view.html")
-	secondViewTpl = template.Must(template.New("second_view").Parse(secondViewHTML))
+	//secondViewHTML := getFileAsHTML("second_view")
+	//secondViewTpl = template.Must(template.New("second_view").Parse(secondViewHTML))
 
 	// thirdViewFuncMap := ThirdViewFormattingFuncMap()
 	// thirdViewHTML := assets.MustAssetString("templates/third_view.html")
