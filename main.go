@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 	"html/template"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"os/signal"
@@ -22,8 +23,8 @@ var secondViewTpl *template.Template
 var thirdViewTpl *template.Template
 
 func init() {
-	navigationBarHTML = assets.MustAssetString("templates/navigation_bar.html")
-
+	//navigationBarHTML = assets.MustAssetString("templates/navigation_bar.html")
+	navigationBarHTML = getFileAsHTML("navigation_bar") // THIS WORKS !!!
 	homepageHTML := assets.MustAssetString("templates/index.html")
 	homepageTpl = template.Must(template.New("homepage_view").Parse(homepageHTML))
 
@@ -34,13 +35,21 @@ func init() {
 	// thirdViewHTML := assets.MustAssetString("templates/third_view.html")
 	// thirdViewTpl = template.Must(template.New("third_view").Funcs(thirdViewFuncMap).Parse(thirdViewHTML))
 }
+func getFileAsHTML(filename string) string {
+	content, fileErr := ioutil.ReadFile(fmt.Sprintf("templates/%s.html", filename))
+	if fileErr != nil {
+		panic(fileErr)
+	}
+	return string(content)
 
+}
 func main() {
 	serverCfg := Config{
 		Host:         "localhost:8000",
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 5 * time.Second,
 	}
+
 	htmlServer := Start(serverCfg)
 	defer htmlServer.Stop()
 
