@@ -3,11 +3,16 @@ package pages
 import (
 	"bytes"
 	"fmt"
+	"html/template"
 	"io/ioutil"
 	"net/http"
-	"text/template"
 )
 
+var navigationBarHTML string
+
+func init() {
+	navigationBarHTML = GetFileAsHTML("navigation_bar") // THIS WORKS !!!
+}
 func Push(w http.ResponseWriter, resource string) {
 	pusher, ok := w.(http.Pusher)
 	if ok {
@@ -41,6 +46,5 @@ func GetFileAsHTML(filename string) string {
 
 }
 func GetNavigationBarHTML() string {
-	navigationBarHTML := GetFileAsHTML("navigation_bar") // THIS WORKS !!!
 	return navigationBarHTML
 }
