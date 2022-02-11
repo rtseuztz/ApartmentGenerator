@@ -12,8 +12,8 @@ import (
 	"sync"
 	"time"
 
-	P "./pages"
 	"github.com/gorilla/mux"
+	P "github.com/rtseuztz/ApartmentGenerator/gofiles/pages"
 )
 
 var navigationBarHTML string

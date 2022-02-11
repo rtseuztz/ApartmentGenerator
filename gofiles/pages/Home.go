@@ -14,5 +14,6 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	fullData := map[string]interface{}{
 		"NavigationBar": template.HTML(GetNavigationBarHTML()),
 	}
-	Render(w, r, GetTemplate("index"), "homepage_view", fullData)
+	template := GetTemplate("index")
+	Render(w, r, template, "index", fullData)
 }
