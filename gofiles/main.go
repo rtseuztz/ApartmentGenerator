@@ -60,6 +60,7 @@ func Start(cfg Config) *HTMLServer {
 	router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("../static"))))
 
 	router.HandleFunc("/", P.HomeHandler)
+	router.HandleFunc("/summoner/{name}", P.SummonerHandler)
 	//router.HandleFunc("/second", SecondHandler)
 	//router.HandleFunc("/third/{number}", ThirdHandler)
 

@@ -2,12 +2,15 @@ package pages
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"io/ioutil"
 	"net/http"
+	"time"
 )
 
+var myClient = &http.Client{Timeout: 5 * time.Second}
 var navigationBarHTML string
 
 func init() {
@@ -47,4 +50,13 @@ func GetFileAsHTML(filename string) string {
 }
 func GetNavigationBarHTML() string {
 	return navigationBarHTML
+}
+func getJson(url string, target interface{}) error {
+	r, err := myClient.Get(url)
+	if err != nil {
+		return err
+	}
+	defer r.Body.Close()
+
+	return json.NewDecoder(r.Body).Decode(target)
 }
