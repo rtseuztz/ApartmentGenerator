@@ -1,3 +1,4 @@
-body {
+.navbar {
+    background-color: purple !important;
     color: cornflowerblue;
 }
