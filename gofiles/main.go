@@ -48,6 +48,23 @@ type HTMLServer struct {
 	wg     sync.WaitGroup
 }
 
+func redir(w http.ResponseWriter, r *http.Request) {
+	//user searched
+	fmt.Printf("bolonga")
+	err := r.ParseForm()
+	if err != nil {
+		log(fmt.Printf("broke"))
+	}
+	summonerName := r.FormValue("summoner_input")
+	if len(summonerName) > 0 {
+		http.Redirect(w, r, fmt.Sprintf("/summoner/%s", summonerName), http.StatusSeeOther)
+	}
+}
+
+func log(i int, err error) {
+	panic("unimplemented")
+}
+
 // Start launches the HTML Server
 func Start(cfg Config) *HTMLServer {
 	// Setup Context
@@ -57,9 +74,10 @@ func Start(cfg Config) *HTMLServer {
 	// Setup Handlers
 	router := mux.NewRouter()
 
-	router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("../static"))))
-
-	router.HandleFunc("/", P.HomeHandler)
+	router.PathPrefix("/static/css/").Handler(http.StripPrefix("/static/css/", http.FileServer(http.Dir("../static/css"))))
+	router.PathPrefix("/static/js/").Handler(http.StripPrefix("/static/js/", http.FileServer(http.Dir("../static/js"))))
+	router.HandleFunc("/", P.HomeHandler).Methods("GET")
+	router.HandleFunc("/", redir).Methods("POST")
 	router.HandleFunc("/summoner/{name}", P.SummonerHandler)
 	//router.HandleFunc("/second", SecondHandler)
 	//router.HandleFunc("/third/{number}", ThirdHandler)

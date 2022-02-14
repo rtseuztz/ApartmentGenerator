@@ -34,6 +34,11 @@ func Render(w http.ResponseWriter, r *http.Request, tpl *template.Template, name
 	}
 	w.Write(buf.Bytes())
 }
+func setCSS(w http.ResponseWriter) {
+	Push(w, "/static/css/home.css")
+	Push(w, "/static/css/navigation_bar.css")
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+}
 func GetTemplate(filename string) *template.Template {
 	viewHTML := GetFileAsHTML(filename)
 	viewTpl := template.Must(template.New(filename).Parse(viewHTML))
