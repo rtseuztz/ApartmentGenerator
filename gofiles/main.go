@@ -76,6 +76,8 @@ func Start(cfg Config) *HTMLServer {
 
 	router.PathPrefix("/static/css/").Handler(http.StripPrefix("/static/css/", http.FileServer(http.Dir("../static/css"))))
 	router.PathPrefix("/static/js/").Handler(http.StripPrefix("/static/js/", http.FileServer(http.Dir("../static/js"))))
+	router.PathPrefix("/static/images/").Handler(http.StripPrefix("/static/images/", http.FileServer(http.Dir("../static/images"))))
+
 	router.HandleFunc("/", P.HomeHandler).Methods("GET")
 	router.HandleFunc("/", redir).Methods("POST")
 	router.HandleFunc("/summoner/{name}", P.SummonerHandler)

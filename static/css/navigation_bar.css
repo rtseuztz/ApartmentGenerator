@@ -1,4 +1,10 @@
 .navbar {
-    background-color: purple !important;
+    background-color: darkorchid !important;
     color: cornflowerblue;
+}
+body {
+    background-image: url(../images/leaguebackground.png);
+    background-color: purple;
+    background-blend-mode: color-burn;
+    background-size: cover;
 }

@@ -56,6 +56,10 @@ func GetFileAsHTML(filename string) string {
 func GetNavigationBarHTML() string {
 	return navigationBarHTML
 }
+
+/*
+Morphs the json into the given object
+*/
 func getJson(url string, target interface{}) error {
 	r, err := myClient.Get(url)
 	if err != nil {
