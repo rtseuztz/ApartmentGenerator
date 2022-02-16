@@ -3,9 +3,12 @@ package pages
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"html/template"
+	"io"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"time"
 )
@@ -56,16 +59,37 @@ func GetFileAsHTML(filename string) string {
 func GetNavigationBarHTML() string {
 	return navigationBarHTML
 }
+func GET(url string) io.ReadCloser {
+	if len(url) <= 0 {
+		return nil
+	}
+	r, err := myClient.Get(url)
+	if err != nil {
+		log.Printf("GET Failed")
+		return nil
+	}
+	if r.StatusCode == 429 {
+		time.Sleep(time.Second)
+		r, err = myClient.Get(url)
+		if err != nil {
+			return nil
+		}
+	}
+	if r.StatusCode != 200 {
+		log.Printf("GET Failed")
+		return nil
+	}
+	defer r.Body.Close()
+	return r.Body
+}
 
 /*
 Morphs the json into the given object
 */
 func getJson(url string, target interface{}) error {
-	r, err := myClient.Get(url)
-	if err != nil {
-		return err
+	respBody := GET(url)
+	if respBody == nil {
+		return errors.New("failed riot get")
 	}
-	defer r.Body.Close()
-
-	return json.NewDecoder(r.Body).Decode(target)
+	return json.NewDecoder(respBody).Decode(target)
 }

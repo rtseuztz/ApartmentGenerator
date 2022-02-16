@@ -7,4 +7,5 @@ body {
     background-color: purple;
     background-blend-mode: color-burn;
     background-size: cover;
+    background-attachment: fixed;
 }

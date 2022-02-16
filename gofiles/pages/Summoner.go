@@ -9,9 +9,11 @@ import (
 )
 
 var summonerTpl *template.Template
+var key string
 
 func init() {
 	summonerTpl = GetTemplate("summoner")
+	key = "RGAPI-670007bb-22b7-43bf-8281-1be84c67fe57"
 }
 
 // HomeHandler renders the homepage view template
@@ -40,7 +42,6 @@ type Summoner struct {
 }
 
 func GetSummoner(name string) Summoner {
-	key := "RGAPI-f402153b-d401-4803-b1bb-11c0ec723270"
 	url := fmt.Sprintf("https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/%s?api_key=%s", name, key)
 	summoner := new(Summoner)
 	getJson(url, summoner)
