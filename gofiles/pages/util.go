@@ -6,7 +6,6 @@ import (
 	"errors"
 	"fmt"
 	"html/template"
-	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -59,7 +58,7 @@ func GetFileAsHTML(filename string) string {
 func GetNavigationBarHTML() string {
 	return navigationBarHTML
 }
-func GET(url string) io.ReadCloser {
+func GET(url string) *http.Response {
 	if len(url) <= 0 {
 		return nil
 	}
@@ -79,17 +78,18 @@ func GET(url string) io.ReadCloser {
 		log.Printf("GET Failed")
 		return nil
 	}
-	defer r.Body.Close()
-	return r.Body
+	//defer r.Body.Close()
+	return r
 }
 
 /*
 Morphs the json into the given object
 */
 func getJson(url string, target interface{}) error {
-	respBody := GET(url)
-	if respBody == nil {
+	resp := GET(url)
+	if resp == nil {
 		return errors.New("failed riot get")
 	}
-	return json.NewDecoder(respBody).Decode(target)
+	defer resp.Body.Close()
+	return json.NewDecoder(resp.Body).Decode(target)
 }

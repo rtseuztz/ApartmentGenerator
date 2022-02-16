@@ -7,7 +7,7 @@ $("#summoner_input").on('keypress', e => {
 
 searchUser = () => {
         let summonerName = $("#summoner_input").val();
-        if (summonerName.length > 0) {
+        if (summonerName.trim().length > 0) {
             window.location.href = "/summoner/" + summonerName;
         }
     

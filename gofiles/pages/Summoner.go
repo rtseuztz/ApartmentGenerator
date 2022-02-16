@@ -28,6 +28,7 @@ func SummonerHandler(w http.ResponseWriter, r *http.Request) {
 		"Name":          summoner.Name,
 		"Level":         summoner.Level,
 		"ProfileIcon":   summoner.ProfileIcon,
+		"ProfileURL":    fmt.Sprintf("/static/images/img/profileicon/%d.png", summoner.ProfileIcon),
 	}
 	// x := homepageTpl
 	// template := GetTemplate("index")
