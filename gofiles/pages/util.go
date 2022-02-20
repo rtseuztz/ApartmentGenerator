@@ -9,6 +9,8 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strconv"
+	"sync"
 	"time"
 )
 
@@ -58,6 +60,37 @@ func GetFileAsHTML(filename string) string {
 func GetNavigationBarHTML() string {
 	return navigationBarHTML
 }
+func addFuncToArray(f func(), functions []func()) {
+	functions = append(functions, f)
+}
+
+// Parallelize parallelizes the function calls
+// func Parallelize(functions ...func()) {
+// 	var waitGroup sync.WaitGroup
+// 	waitGroup.Add(len(functions))
+
+// 	defer waitGroup.Wait()
+
+// 	for _, function := range functions {
+// 		go func(copy func()) {
+// 			defer waitGroup.Done()
+// 			copy()
+// 		}(function)
+// 	}
+// }
+func Parallelize(functions []func()) {
+	var waitGroup sync.WaitGroup
+	waitGroup.Add(len(functions))
+
+	defer waitGroup.Wait()
+
+	for _, function := range functions {
+		go func(copy func()) {
+			defer waitGroup.Done()
+			copy()
+		}(function)
+	}
+}
 func GET(url string) *http.Response {
 	if len(url) <= 0 {
 		return nil
@@ -66,9 +99,13 @@ func GET(url string) *http.Response {
 	if err != nil {
 		log.Printf("GET Failed")
 		return nil
-	}
-	if r.StatusCode == 429 {
-		time.Sleep(time.Second)
+	} else if r.StatusCode == 429 {
+		sleepDuration, err := strconv.Atoi(r.Header["Retry-After"][0])
+		if err != nil {
+			return nil
+		}
+		log.Printf("Rate limit - %ds", sleepDuration)
+		time.Sleep(time.Duration(sleepDuration) * time.Second)
 		r, err = myClient.Get(url)
 		if err != nil {
 			return nil
@@ -85,11 +122,30 @@ func GET(url string) *http.Response {
 /*
 Morphs the json into the given object
 */
-func getJson(url string, target interface{}) error {
+func getJson[T []string | interface{}](url string, target T) error {
 	resp := GET(url)
 	if resp == nil {
 		return errors.New("failed riot get")
 	}
 	defer resp.Body.Close()
 	return json.NewDecoder(resp.Body).Decode(target)
+}
+
+// func getJson(url string, target interface{}) error {
+// 	resp := GET(url)
+// 	if resp == nil {
+// 		return errors.New("failed riot get")
+// 	}
+// 	defer resp.Body.Close()
+// 	return json.NewDecoder(resp.Body).Decode(target)
+// }
+func getJsonArr(url string, target *[]string) error {
+	resp, err := http.Get(url)
+	if err != nil {
+		fmt.Println("No response from request")
+	}
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body) // response body is []byte
+	json.Unmarshal([]byte(body), &target)
+	return err
 }

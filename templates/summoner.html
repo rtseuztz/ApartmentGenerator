@@ -17,12 +17,19 @@
             {{.NavigationBar}}
 
             <h1>Hello, summoner!</h1>
-            <div id="user_container">
-                <div id="user_name">{{.Name}}</div>
-                <div id="user_level">{{.Level}}</div>
-                <div id="user_icon">{{.ProfileIcon}}</div>
-                <img src={{.ProfileURL}}>
+            <div id="summoner_container">
+
+                <div id="user_info">
+                    <div id="user_name">{{.Name}}</div>
+                    <div id="user_level">{{.Level}}</div>
+                    <div id="user_icon">{{.ProfileIcon}}</div>
+                    <img src={{.ProfileURL}}>
+                </div>
+                <div id="game_list">
+                    
+                </div>
             </div>
+
         </div>
     </body>
 

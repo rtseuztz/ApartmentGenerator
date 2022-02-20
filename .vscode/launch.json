@@ -5,7 +5,14 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch test function",
+            "name": "Main",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "gofiles"
+        },
+        {
+            "name": "Test",
             "type": "go",
             "request": "launch",
             "mode": "test",
@@ -15,12 +22,6 @@
                 "TestAll"
             ]
         },
-        {
-            "name": "Launch Package",
-            "type": "go",
-            "request": "launch",
-            "mode": "auto",
-            "program": "gofiles"
-        },
+
     ]
 }
