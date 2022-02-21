@@ -1,5 +1,5 @@
-# ApartmentGenerator
-Generates a random apartment.
+# LOLPal 2.0
+League app in Golang
 https://medium.com/meshstudio/serving-up-html-with-go-92f767856daf
 
 // Auto-generated files to bundle templates/style-sheets together
