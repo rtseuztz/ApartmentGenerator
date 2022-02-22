@@ -14,7 +14,7 @@ var key string
 
 func init() {
 	summonerTpl = GetTemplate("summoner")
-	key = "RGAPI-2af5b0aa-b5c5-4f4b-a548-6de8cadf84d1"
+	key = "" //Put your key here!
 }
 
 // HomeHandler renders the homepage view template
